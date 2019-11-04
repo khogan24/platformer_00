@@ -1,5 +1,3 @@
-import javax.xml.stream.util.StreamReaderDelegate;
-
 /**
  * Hogan, Kevin 6/20/2019
  *
@@ -9,158 +7,154 @@ import javax.xml.stream.util.StreamReaderDelegate;
  *
  *  https://www.youtube.com/watch?v=5ApeBo1LujE
  */
-public class Entities {
-    //public static double getX_Pos;
-    //public static double getY_pos;
-    //private static double x_pos;
-    private static int name_ID = 0;        //make more automated
-    private static int hitPoints = 0;
-    private static double speed = 0;
-    private static double x_pos, y_pos;
-    private static int shape;
-    private double[] position = new double[]{0, 0};
-    private double pi = Math.PI;
+public class Entities
+{
 
-    public Entities() {
-    }
+    //      Private Fields
+    //----------------------------
+    private int X_Position;
+    private int Y_Position;
+    private int entityType;
+    private int speed;
+    private double size;
 
-    public Entities(int hitPoints, int x_pos, int y_pos, int speed) {
-        this.hitPoints = hitPoints;
-        this.x_pos = x_pos;
-        this.y_pos = y_pos;
-        this.speed = speed;
-    }
-
-    public Entities(int hitPoints, int x_pos, int y_pos, double speed, int shape) {
-        this.hitPoints = hitPoints;
-        this.x_pos = x_pos;
-        this.y_pos = y_pos;
-        this.speed = speed;
-        if (speed == 0) speed = 1;
-        this.shape = shape;
-    }
-
-    public  static double getX_Pos() {
-        return x_pos;
-    }
-
-    public static double getY_pos() {
-        return y_pos;
-    }
-
-    public static double getHitPoints() {
-        return hitPoints;
-    }
-
-    public static double getSpeed() {
-        return speed;
-    }
-
-    public static int getName_ID() {
-        return name_ID;
-    }
-
-    public static int getShape() {
-        return shape;
-    }
-
-
-//   public double[] newPos(double t_change, double r_change){
-//       double radius = Math.sqrt(Math.pow(getX_Pos()- StdDraw.mouseX() , 2) + Math.pow(getY_pos() - StdDraw.mouseY() , 2));
-//       double theta = Math.acos( (getX_Pos()-StdDraw.mouseX()) / radius);
-//        position[0] = (radius *(Math.cos(theta + t_change * pi/12))) + x_pos + r_change;
-//        position[1] = (radius * (Math.sin(theta + t_change * pi/12))) + y_pos + r_change;
-//        x_pos = position[0];
-//        y_pos = position[1];
-//        return position;
-//   }
-
-
-    public static double Move_Left() {
-        if ((x_pos >= -620))
-            return x_pos = x_pos - speed * .8;
+    //      Constructors
+    //----------------------------
+    Entities()
+    {
+        if(Platform_00.numOfTotalEntities < 25)
+        {
+            Platform_00.allEntitiesInWorld[Platform_00.numOfTotalEntities] = this;
+            Platform_00.numOfTotalEntities++;
+        }
         else
-            return x_pos = x_pos;
-    }
+            System.out.println("Oops, too many");
+    }//default
 
-    public static double Move_Right() {
-        if (x_pos <= 620)
-            return x_pos = x_pos + speed * .8;
-        else return x_pos = x_pos;
-    }
-
-    public static double Move_Up() {
-        if (y_pos < 340)
-            return y_pos = y_pos + speed * .8;
+    Entities(int x, int y, int type, int radius)
+    {
+        if(Platform_00.numOfTotalEntities < 25)
+        {
+            this.size = radius;
+            this.X_Position = x;
+            this.Y_Position = y;
+            this.entityType = type;
+            Platform_00.allEntitiesInWorld[Platform_00.numOfTotalEntities] = this;
+            Platform_00.numOfTotalEntities++;
+        }
         else
-            return y_pos = y_pos;
+            System.out.println("Oops, too many");
+    }
+    Entities(int x, int y, int type, double radius, int velo)
+    {
+        if(Platform_00.numOfTotalEntities < 25)
+        {
+            this.size = radius;
+            this.speed = velo;
+            this.X_Position = x;
+            this.Y_Position = y;
+            this.entityType = type;
+            Platform_00.allEntitiesInWorld[Platform_00.numOfTotalEntities] = this;
+            Platform_00.numOfTotalEntities++;
+        }
+        else
+            System.out.println("Oops, too many");
     }
 
-    public static double Move_Dwn() {
-        if (y_pos > -340)
-            return y_pos = y_pos - speed * .6;
-        else
-            return y_pos = y_pos;
+    //      Getters and Setters
+    //----------------------------
+    public void setX_Position(int x)
+    {
+        this.X_Position = x;
+    }
+    public void setY_Position(int y)
+    {
+        this.Y_Position = y;
+    }
+    public void setEntityType(int type)
+    {
+        this.entityType = type;
+    }
+    public void setSpeed(int velo)
+    {
+        this.speed = velo;
+    }
+    public void setSize(int radius)
+    {
+        this.size = radius;
+    }
+    public double getSize()
+    {
+        return this.size;
+    }
+    public int getSpeed()
+    {
+        return this.speed;
+    }
+    public int getType()
+    {
+        return this.entityType;
+    }
+    public int getX_Position()
+    {
+        return this.X_Position;
+    }
+    public int getY_Position()
+    {
+        return this.Y_Position;
     }
 
-    public double Move_FwdX() {
-        double distance = Math.sqrt(Math.pow((StdDraw.mouseX()) - x_pos, 2) + Math.pow((StdDraw.mouseY()) - y_pos, 2));
-        if (distance <= 30) return x_pos;
-        else
-            return x_pos = x_pos - speed * 2 * Math.sin((x_pos - StdDraw.mouseX()) / distance);
+    //      Mutators
+    //----------------------------
+    public void MoveLeft()
+    {
+        if(this.getX_Position() > -(Platform_00.screenWidth)/2  +10)
+        {
+            this.setX_Position(this.getX_Position() - this.getSpeed());
+        }
+        else this.setX_Position(this.getX_Position());
+    }
+     public void MoveRight()
+    {
+        if(this.getX_Position() < (Platform_00.screenWidth)/2  - 10)
+        {
+            this.setX_Position(this.getX_Position() + this.getSpeed());
+        }
+        else this.setX_Position(this.getX_Position());
+    }
+    public void MoveUp()
+    {
+        if(this.getY_Position() < (Platform_00.screenHeight)/2 -10)
+        {
+           this.setY_Position( this.getY_Position() + this.getSpeed() );
+        }
+        else this.setX_Position( this.getX_Position());
     }
 
-    public double Move_FwdY() {
-        double distance = Math.sqrt(Math.pow((StdDraw.mouseX()) - x_pos, 2) + Math.pow((StdDraw.mouseY()) - y_pos, 2));
-        if (distance <= 30) return y_pos;
-        else
-            return y_pos = y_pos + speed * 2 * Math.sin((StdDraw.mouseY() - y_pos) / distance);
+    public void MoveDown()
+    {
+
+        if(this.getY_Position() > (-Platform_00.screenHeight)/2 +10)
+        {
+            this.setY_Position((this.getY_Position() - Platform_00.getGravity()));
+        }
+        else this.setX_Position( this.getX_Position());
 
     }
 
-    public double Move_BackX() {
-        double distance = Math.sqrt(Math.pow((StdDraw.mouseX()) - x_pos, 2) + Math.pow((StdDraw.mouseY()) - y_pos, 2));
-        if (distance <= 30) return x_pos;
-        else
-            return x_pos = x_pos - speed * -2 * Math.sin((x_pos - StdDraw.mouseX()) / distance);
-    }
-
-    public double Move_BackY() {
-        double distance = Math.sqrt(Math.pow((StdDraw.mouseX()) - x_pos, 2) + Math.pow((StdDraw.mouseY()) - y_pos, 2));
-        if (distance <= 30) return y_pos;
-        else
-            return y_pos = y_pos + speed * -2 * Math.sin((StdDraw.mouseY() - y_pos) / distance);
-
+    public void showME()
+    {
+        switch (this.entityType)
+        {
+            case 1:
+                StdDraw.filledCircle(this.getX_Position(), this.getY_Position(), this.getSize());
+                break;
+            case 2:
+                StdDraw.filledSquare(this.getX_Position(), this.getY_Position(), this.getSize());
+            break;
+            default:
+                StdDraw.filledCircle(this.getX_Position(), this.getY_Position(), this.getSize());
+                break;
+        }
     }
 }
-
-//    public double Move_LeftOfMouseX() {
-//        double distance = Math.sqrt(Math.pow((StdDraw.mouseX() - x_pos), 2) + Math.pow((StdDraw.mouseY() - y_pos), 2));
-//        //double theta = Math.acos((StdDraw.mouseX() - x_pos)/distance);
-//        return x_pos = StdDraw.mouseX() + distance * (StdDraw.mouseX() - x_pos);
-//    }
-//
-//    public double Move_LeftOfMouseY() {
-//      *//*  double distance = Math.sqrt(Math.pow((StdDraw.mouseX() - x_pos), 2) + Math.pow((StdDraw.mouseY() - y_pos), 2));
-//        return y_pos = (StdDraw.mouseY() + (distance * StdDraw.mouseY() - y_pos));*//*
-//
-//      return y_pos;
-//    }
-//
-//    /**
-//     * public int Move_RightofMouse()
-//     * {
-//     * <p>
-//     * }
-//     * public int Move_LeftofMouse()
-//     * {
-//     * <p>
-//     * }
-//     **/
-//    public int hurtme() {
-//        return hitPoints - 1; // add variable to damage
-//    }
-//}
-
-
-

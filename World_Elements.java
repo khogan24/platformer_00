@@ -3,8 +3,5 @@
  */
 public class World_Elements
 {
-    double height;
-    double width;
-    double hit_points;
 
 }

@@ -1,3 +1,4 @@
+import javax.swing.text.html.parser.Entity;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -6,105 +7,55 @@ import java.awt.event.KeyEvent;
  */
 public class Platform_00
 {
-    private static double[] pos = new double[] {0,0};
-    double gravity = 9.8;
-    double x1 = -300;
-    double y1 = -300;
-    double x2,y2;
-    private static double GRAVITY = 9.8;
-    int scale = 1;
-    Entities Ball_1 = new Entities(3, 0, 0,15);
 
-    static void drawGridCanvas()
+    static Entities[] allEntitiesInWorld = new Entities[25];
+    public static int numOfTotalEntities = 0;
+    public static int screenWidth = 1080;
+    public static int screenHeight = 720;
+    public static int PLAYER_START_X = -520;
+    public static int PLAYER_START_Y = -220;
+    public static double PLAYER1_RADIUS = 0.5;
+
+    private static int gravity = 10;
+    private static void drawWorld( int screenWidth, int screenHeight)
     {
-        double resolution_Width = 1280;
-        double resolution_Height = 720;
-        for (double i = 0; i < resolution_Width; i += 20) {
-            if (i <= resolution_Height) {
-                if (i == 0) {
-                    StdDraw.setPenRadius(.005);
-                } else
-                    StdDraw.setPenRadius(.001);
-                StdDraw.line(-resolution_Width / 2, i / 2, resolution_Width / 2, i / 2);
-                StdDraw.line(-resolution_Width / 2, -i / 2, resolution_Width / 2, -i / 2);
-            }
-            if (i == 0) {
-                StdDraw.setPenRadius(.005);
-            } else
-                StdDraw.setPenRadius(.001);
-            StdDraw.line(i / 2, -resolution_Height / 2, i / 2, resolution_Height / 2);
-            StdDraw.line(-i / 2, -resolution_Height / 2, -i / 2, resolution_Height / 2);
-
-        }
-        for (double i = 0; i < resolution_Height; i += 20) {
-            if (i == 0) {
-                StdDraw.setPenRadius(.005);
-            } else
-                StdDraw.setPenRadius(.001);
-            StdDraw.line(-resolution_Width / 2, i / 2, resolution_Width / 2, i / 2);
-            StdDraw.line(-resolution_Width / 2, -i / 2, resolution_Width / 2, -i / 2);
-        }
+        StdDraw.setCanvasSize(screenWidth, screenHeight);
+        StdDraw.setXscale(-screenWidth/2, screenWidth/2);
+        StdDraw.setYscale(-screenHeight/2, screenHeight/2);
+    }
+    public static int getGravity()
+    {
+        return gravity;
     }
 
 
-    public static void main(String [] args)
+    public static void main (String args[])
     {
         StdDraw.enableDoubleBuffering();
-        double gravity = 9.8;
-        double x1 = -300;
-        double y1 = -300;
-        double x2,y2;
-        double resolution_Height = 720;
-        double resolution_Width = 1280;
-        int scale = 1;
-        Entities Ball_1 = new Entities(3, 0, 0,25);
-        int cooldown = 0;
+        drawWorld(screenWidth, screenHeight);
+        StdDraw.filledCircle(PLAYER_START_X, PLAYER_START_Y, 8.5);
+        StdDraw.setPenColor(Color.RED);
+        Entities PLAYER = new Entities(PLAYER_START_X, PLAYER_START_Y, 1,PLAYER1_RADIUS, 10);
+        Entities testWall = new Entities(0, 0, 2, 100);
+        testWall.showME();
 
-
-        StdDraw.setCanvasSize(scale *(int)resolution_Width,scale *(int)resolution_Height);
-        StdDraw.setXscale(-resolution_Width/2*scale,+resolution_Width/2*scale);
-        StdDraw.setYscale(-resolution_Height/2*scale,+resolution_Height/2*scale);
-        while(true) {
+        while(true)
+        {
             StdDraw.clear();
-            //grid for debugging, grid line every 20 pixels
-            StdDraw.setPenColor(Color.black);
-            /*
-*/
-            // time and animation tests
-
-            StdDraw.setPenColor(Color.MAGENTA);
-            StdDraw.filledCircle( Ball_1.getX_Pos(), Ball_1.getY_pos(), 10);
-            // Ball_1.Move_Left();
-            StdDraw.setPenRadius(.005);
-            StdDraw.setPenColor(Color.GREEN);
-            StdDraw.line( Ball_1.getX_Pos(),Ball_1.getY_pos(), StdDraw.mouseX(),StdDraw.mouseY());
             if(StdDraw.isKeyPressed(87)){
-                Entities.Move_Up();}//w
+                PLAYER.MoveUp();}//w
             if(StdDraw.isKeyPressed(65)){
-                Entities.Move_Left();}//a
+                PLAYER.MoveLeft();}//a
             if(StdDraw.isKeyPressed(83)){
-                Entities.Move_Dwn();}//s
+                PLAYER.MoveDown();}//s
             if(StdDraw.isKeyPressed(68)) {
-                Entities.Move_Right();//d
+                PLAYER.MoveRight();//d
             }
-
-
-            //StdDraw.filledCircle(-460, -250, 10);
+            StdDraw.filledCircle(screenWidth/2, screenHeight/2, 10);
+            StdDraw.filledCircle(PLAYER.getX_Position(), PLAYER.getY_Position(), 8.5);
             StdDraw.show();
-            if (cooldown == 0) {
-
-                if (StdDraw.isMousePressed()) {
-                    StdDraw.setPenColor(Color.RED);
-                    StdDraw.filledCircle( StdDraw.mouseX(),StdDraw.mouseY(), 10);
-                    cooldown = 3;
-                    StdDraw.show();
-                }
-            }
-            if (cooldown < 0)
-                cooldown--;
-            StdDraw.show();
-            StdDraw.pause(20);
+            StdDraw.pause(30);
         }
+
     }
 }
-
