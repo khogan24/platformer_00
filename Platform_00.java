@@ -71,7 +71,6 @@ public class Platform_00
             /*
 */
             // time and animation tests
-            //nest this in characters, not main animation(will f**** up timing and control)
 
             StdDraw.setPenColor(Color.MAGENTA);
             StdDraw.filledCircle( Ball_1.getX_Pos(), Ball_1.getY_pos(), 10);
@@ -101,7 +100,7 @@ public class Platform_00
                     StdDraw.show();
                 }
             }
-            if (cooldown != 0)
+            if (cooldown < 0)
                 cooldown--;
             StdDraw.show();
             StdDraw.pause(20);
